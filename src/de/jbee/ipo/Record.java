@@ -1,8 +1,13 @@
 package de.jbee.ipo;
 
+import de.jbee.lang.Array;
 import de.jbee.lang.List;
 
 public final class Record {
+
+	public static Record record( Schema schema, Object... values ) {
+		return record( schema, Array.sequence( values ) );
+	}
 
 	public static Record record( Schema schema, List<?> values ) {
 		return new Record( schema, values );

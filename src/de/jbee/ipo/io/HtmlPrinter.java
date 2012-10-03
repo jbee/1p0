@@ -45,6 +45,8 @@ public class HtmlPrinter
 
 	@Override
 	public void print( Schema schema ) {
+		out.append( "<tr><th colspan='" + schema.attributes.length() + "'>" + schema.name
+				+ "</th></tr>" );
 		out.append( "<tr>" );
 		for ( int i = 0; i < schema.attributes.length(); i++ ) {
 			out.append( "<th>" );

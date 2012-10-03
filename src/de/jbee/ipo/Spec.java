@@ -11,6 +11,10 @@ public final class Spec
 		return spec( name, location, List.with.element( param ), List.with.elements( series ) );
 	}
 
+	public static Spec spec( String name, String location, List<Param> params, Schema... series ) {
+		return spec( name, location, params, List.with.elements( series ) );
+	}
+
 	public static Spec spec( String name, String location, List<Param> params, List<Schema> series ) {
 		return spec( named( name ), located( location ), params, series );
 	}
@@ -22,7 +26,7 @@ public final class Spec
 	public final Name name;
 	public final Location location;
 	public final List<Param> params; // what goes in
-	public final List<Schema> series; // what comes out
+	public final List<Schema> series; // what comes out --- FIXME sometimes a schema occurs more than once but we do not know how often
 
 	private Spec( Name name, Location location, List<Param> params, List<Schema> series ) {
 		super();

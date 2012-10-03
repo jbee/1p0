@@ -1,21 +1,12 @@
 package de.jbee.ipo;
 
-import de.jbee.lang.Map;
-import de.jbee.lang.Ord;
-import de.jbee.lang.Order;
-import de.jbee.lang.Ordering;
-import de.jbee.lang.seq.Sequences;
+import static de.jbee.ipo.Program.program;
 
 public final class Input
 		implements Named {
 
-	public static final Ord<Object> PROCESS_ORDER = Order.typeaware( new ProcessOrder(),
-			Process.class );
-
 	public static Input input( Process process, Args args ) {
-		return new Input( Program.program( process.specification().name(),
-				Map.with.<Process> noEntries( PROCESS_ORDER ).insert(
-						Sequences.key( process.specification().name ), process ) ),
+		return new Input( program( process.specification().name(), process ),
 				process.specification(), args );
 	}
 
@@ -38,15 +29,5 @@ public final class Input
 	@Override
 	public Name name() {
 		return spec.name;
-	}
-
-	public static class ProcessOrder
-			implements Ord<Process> {
-
-		@Override
-		public Ordering ord( Process left, Process right ) {
-			return Name.ORDER.ord( left.specification(), right.specification() );
-		}
-
 	}
 }

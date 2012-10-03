@@ -1,18 +1,23 @@
 package de.jbee.ipo;
 
-import de.jbee.lang.Map;
+import de.jbee.lang.Array;
+import de.jbee.lang.List;
 
 public final class Program
 		implements Named {
 
-	public static Program program( Name name, Map<Process> processes ) {
+	public static Program program( Name name, Process... processes ) {
+		return program( name, Array.sequence( processes ) );
+	}
+
+	public static Program program( Name name, List<Process> processes ) {
 		return new Program( name, processes );
 	}
 
 	public final Name name;
-	public final Map<Process> processes;
+	public final List<Process> processes;
 
-	private Program( Name name, Map<Process> processes ) {
+	private Program( Name name, List<Process> processes ) {
 		super();
 		this.name = name;
 		this.processes = processes;
@@ -20,7 +25,7 @@ public final class Program
 
 	public Process processNamed( Name name ) {
 		for ( int i = 0; i < processes.length(); i++ ) {
-			Process p = processes.at( i ).value();
+			Process p = processes.at( i );
 			if ( p.specification().name.equalTo( name ) ) {
 				return p;
 			}
