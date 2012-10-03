@@ -14,6 +14,8 @@ public final class Param
 	public final Attr attr;
 	public final boolean required;
 
+	// TODO required might depend on other parameters
+
 	private Param( Attr attr, boolean required ) {
 		super();
 		this.attr = attr;

@@ -3,7 +3,7 @@ package de.jbee.ipo;
 public final class Arg
 		implements Named, Attributed {
 
-	public static Arg arg( Param param, Value value, String external ) {
+	public static Arg arg( Param param, Object value, String external ) {
 		return new Arg( param, value, external );
 	}
 
@@ -15,10 +15,10 @@ public final class Arg
 	 */
 	public final String external;
 
-	private Arg( Param param, Value value, String plain ) {
+	private Arg( Param param, Object value, String plain ) {
 		super();
 		this.param = param;
-		this.value = value;
+		this.value = Value.value( param.attr, value );
 		this.external = plain;
 		checkValue( param, value );
 	}

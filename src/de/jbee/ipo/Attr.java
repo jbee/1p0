@@ -1,14 +1,19 @@
 package de.jbee.ipo;
 
+import de.jbee.lang.Array;
 import de.jbee.lang.List;
 
 public final class Attr
 		implements Named, Attributed {
 
 	public static List<Attr> attributes( Attributed... attributes ) {
-		Attr[] attrs = new Attr[attributes.length];
+		return attributes( Array.sequence( attributes ) );
+	}
+
+	public static List<Attr> attributes( List<? extends Attributed> attributes ) {
+		Attr[] attrs = new Attr[attributes.length()];
 		for ( int i = 0; i < attrs.length; i++ ) {
-			attrs[i] = attributes[i].attribute();
+			attrs[i] = attributes.at( i ).attribute();
 		}
 		return List.with.elements( attrs );
 	}
@@ -42,6 +47,14 @@ public final class Attr
 		return isMandatory()
 			? this
 			: new Attr( name, proto, 1, maxOccur );
+	}
+
+	/**
+	 * same as {@link #mandatory()} but as a result this is more readable. It means it is guaranteed
+	 * to occur.
+	 */
+	public Attr nonnull() {
+		return mandatory();
 	}
 
 	public boolean isList() {

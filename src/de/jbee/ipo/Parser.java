@@ -25,7 +25,7 @@ public abstract class Parser
 	private static class IntegerParser
 			extends Parser {
 
-		protected IntegerParser( Kind kind, Pattern pattern ) {
+		protected IntegerParser( Objective kind, Format pattern ) {
 			super( null );
 		}
 

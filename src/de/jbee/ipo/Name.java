@@ -29,7 +29,7 @@ public final class Name
 	}
 
 	private static Name inferFrom( String name ) {
-		String s = name.replaceAll( "[A-Z]", "-$1" );
+		String s = name.replaceAll( "[A-Z]", "-$0" );
 		if ( s.startsWith( "-" ) ) {
 			s = s.substring( 1 );
 		}

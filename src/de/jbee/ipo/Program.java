@@ -18,10 +18,10 @@ public final class Program
 		this.processes = processes;
 	}
 
-	public Process processLocatedAt( Location location ) {
+	public Process processNamed( Name name ) {
 		for ( int i = 0; i < processes.length(); i++ ) {
 			Process p = processes.at( i ).value();
-			if ( p.specification().location.equalTo( location ) ) {
+			if ( p.specification().name.equalTo( name ) ) {
 				return p;
 			}
 		}

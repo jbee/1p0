@@ -1,5 +1,6 @@
 package de.jbee.ipo;
 
+
 public final class Output {
 
 	public static Output output( Input input, Data data ) {

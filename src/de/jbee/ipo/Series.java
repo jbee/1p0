@@ -5,21 +5,22 @@ import de.jbee.lang.List;
 public final class Series
 		implements Named {
 
-	public static Series series( Schema schema, List<List<Object>> values ) {
-		return new Series( schema, values );
+	public static Series series( Schema schema, List<Record> records ) {
+		return new Series( schema, records );
 	}
 
 	public final Schema schema;
-	public final List<List<Object>> values;
+	public final List<Record> records;
 
-	private Series( Schema schema, List<List<Object>> values ) {
+	private Series( Schema schema, List<Record> records ) {
 		super();
 		this.schema = schema;
-		this.values = values;
+		this.records = records;
 	}
 
 	@Override
 	public Name name() {
 		return schema.name;
 	}
+
 }
