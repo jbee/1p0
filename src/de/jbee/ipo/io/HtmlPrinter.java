@@ -9,9 +9,12 @@ import de.jbee.ipo.Record;
 import de.jbee.ipo.Schema;
 import de.jbee.ipo.Series;
 import de.jbee.ipo.Value;
+import de.jbee.ipo.http.IO;
 
 public class HtmlPrinter
 		extends Printer {
+
+	private static final IO.Resource CSS = IO.resource( HtmlPrinter.class, "default.css" );
 
 	private final PrintStream out;
 
@@ -22,9 +25,14 @@ public class HtmlPrinter
 
 	@Override
 	public void print( Output output ) {
-		out.append( "<html><head></head><body>" );
+		out.append( "<html><head>" );
+		out.append( "<style>" );
+		CSS.print( out );
+		out.append( "</style></head><body><table class='content'><tr><td valign='top'>" );
+		out.append( "<h1>" + output.input.program.name + "</h1>" );
+		out.append( "<h2>" + output.data.name + "</h2><hr/>" );
 		printDataIn( output );
-		out.append( "</html>" );
+		out.append( "</td></tr></table></html>" );
 	}
 
 	@Override
@@ -37,7 +45,7 @@ public class HtmlPrinter
 
 	@Override
 	public void print( Series series ) {
-		out.append( "<table>" );
+		out.append( "<table class='series'>" );
 		print( series.schema );
 		printRecordsIn( series );
 		out.append( "</table>" );

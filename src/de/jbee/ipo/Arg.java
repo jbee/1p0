@@ -3,6 +3,10 @@ package de.jbee.ipo;
 public final class Arg
 		implements Named, Attributed {
 
+	public static Arg arg( Param param, Object value ) {
+		return arg( param, value, null );
+	}
+
 	public static Arg arg( Param param, Object value, String external ) {
 		return new Arg( param, value, external );
 	}

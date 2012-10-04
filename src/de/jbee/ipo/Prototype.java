@@ -8,6 +8,7 @@ public final class Prototype
 	public static final Prototype LOCATION = proto( named( "location" ), Location.class );
 	public static final Prototype NAME = proto( named( "name" ), Name.class );
 	public static final Prototype NUMBER = proto( named( "number" ), Integer.class );
+	public static final Prototype OUTPUT = proto( named( Output.class ), Output.class );
 
 	public static Prototype proto( Name name, Class<?> type ) {
 		return new Prototype( name, type, Objective.DATA, null, null, null );

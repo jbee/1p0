@@ -4,6 +4,7 @@ import static de.jbee.ipo.Attr.attr;
 import static de.jbee.ipo.Data.data;
 import static de.jbee.ipo.Name.named;
 import static de.jbee.ipo.Output.output;
+import static de.jbee.ipo.Record.record;
 import static de.jbee.ipo.Schema.schema;
 import static de.jbee.ipo.Series.series;
 import static de.jbee.ipo.Spec.spec;
@@ -38,7 +39,7 @@ public class Overview
 		for ( int i = 0; i < ps.length(); i++ ) {
 			Process p = ps.at( i );
 			Spec spec = p.specification();
-			records.append( Record.record( PROCESS, spec.name, spec.location ) );
+			records = records.append( record( PROCESS, spec.name, spec.location ) );
 		}
 		Series processes = series( named( "processes" ), PROCESS, records );
 		return output( input, data( "overview", processes ) );

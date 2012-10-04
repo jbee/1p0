@@ -2,17 +2,22 @@ package de.jbee.ipo;
 
 import static de.jbee.ipo.Location.located;
 import static de.jbee.ipo.Name.named;
+import de.jbee.lang.Array;
 import de.jbee.lang.List;
 
 public final class Spec
 		implements Named {
 
+	public static Spec spec( String name, String location, Param... params ) {
+		return spec( name, location, Array.sequence( params ) );
+	}
+
 	public static Spec spec( String name, String location, Param param, Schema... series ) {
-		return spec( name, location, List.with.element( param ), List.with.elements( series ) );
+		return spec( name, location, Array.sequence( param ), Array.sequence( series ) );
 	}
 
 	public static Spec spec( String name, String location, List<Param> params, Schema... series ) {
-		return spec( name, location, params, List.with.elements( series ) );
+		return spec( name, location, params, Array.sequence( series ) );
 	}
 
 	public static Spec spec( String name, String location, List<Param> params, List<Schema> series ) {
