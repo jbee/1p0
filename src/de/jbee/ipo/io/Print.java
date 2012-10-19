@@ -28,7 +28,7 @@ public class Print
 	public static final Param PRINTED = param( attr( "printed", Prototype.OUTPUT ) ).required();
 	public static final Param STREAM = param( attr( "stream", PRINT_STREAM ) ).optional();
 
-	private static final Spec SPEC = spec( PROCESS_NAME.toString(), "/print/html/", PRINTED, STREAM );
+	private static final Spec SPEC = spec( PROCESS_NAME, "/print/html/", PRINTED, STREAM );
 
 	@Override
 	public Spec specification() {

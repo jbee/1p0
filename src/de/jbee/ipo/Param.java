@@ -47,4 +47,11 @@ public final class Param
 	public Attr attribute() {
 		return attr;
 	}
+
+	@Override
+	public String toString() {
+		return required
+			? attr.toString()
+			: "(" + attr.toString() + ")";
+	}
 }

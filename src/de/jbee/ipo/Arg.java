@@ -51,4 +51,9 @@ public final class Arg
 	public Attr attribute() {
 		return param.attr;
 	}
+
+	@Override
+	public String toString() {
+		return param + "=" + value;
+	}
 }

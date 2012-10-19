@@ -45,6 +45,7 @@ public class HtmlPrinter
 
 	@Override
 	public void print( Series series ) {
+		out.append( "<h4>" + series.name + "</h4>" );
 		out.append( "<table class='series'>" );
 		print( series.schema );
 		printRecordsIn( series );

@@ -20,14 +20,16 @@ import de.jbee.ipo.Input;
 import de.jbee.ipo.Output;
 import de.jbee.ipo.Process;
 import de.jbee.ipo.Program;
+import de.jbee.ipo.Spec;
 import de.jbee.ipo.io.Print;
+import de.jbee.ipo.util.Decode;
 import de.jbee.ipo.util.Describe;
 import de.jbee.ipo.util.Overview;
 
 public class Server {
 
 	static final Program program = program( named( "test" ), new Print(), new Overview(),
-			new Describe() );
+			new Describe(), new Decode() );
 
 	public static void main( String[] args )
 			throws Exception {
@@ -41,29 +43,44 @@ public class Server {
 				try {
 					respond( ex );
 				} catch ( RuntimeException e ) {
+					e.printStackTrace();
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
 					e.printStackTrace( new PrintStream( out ) );
-					ex.sendResponseHeaders( HttpURLConnection.HTTP_INTERNAL_ERROR, out.size() );
-					ex.getResponseBody().write( out.toByteArray() );
-					ex.close();
+					respond( ex, HttpURLConnection.HTTP_INTERNAL_ERROR, out );
 				}
+			}
+
+			private void respond( HttpExchange ex, int code, ByteArrayOutputStream body )
+					throws IOException {
+				ex.sendResponseHeaders( code, body.size() );
+				ex.getResponseBody().write( body.toByteArray() );
+				body.close();
+				ex.close();
 			}
 
 			private void respond( HttpExchange ex )
 					throws IOException {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-				Process used = program.processNamed( named( ex.getRequestURI().getPath().toString().replace(
-						"/", "" ) ) );
+				String path = ex.getRequestURI().getPath();
+				String query = ex.getRequestURI().getQuery();
+				if ( "/favicon.ico".equals( path ) ) {
+					respond( ex, HttpURLConnection.HTTP_NOT_FOUND, out );
+					return;
+				}
+				Process used = program.processNamed( named( path.replace( "/", "" ) ) );
 
-				Output output = used.process( input( program, used.specification(), args() ) );
+				Spec spec = used.specification();
+				Process decode = program.processNamed( Decode.SERVICE_NAME );
+
+				Output output = used.process( input( program, spec,
+						Decode.args( decode.process( input( program, decode.specification(), args(
+								arg( Decode.NAME, spec.name ), arg( Decode.QUERY, query ) ) ) ) ) ) );
 
 				Process print = program.processNamed( Print.PROCESS_NAME );
 				print.process( Input.input( program, print.specification(), args( arg(
 						Print.PRINTED, output ), arg( Print.STREAM, new PrintStream( out ) ) ) ) );
-				ex.sendResponseHeaders( HttpURLConnection.HTTP_OK, out.size() );
-				ex.getResponseBody().write( out.toByteArray() );
-				ex.close();
+				respond( ex, HttpURLConnection.HTTP_OK, out );
 			}
 		} );
 		server.start();

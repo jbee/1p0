@@ -9,10 +9,12 @@ import static de.jbee.ipo.Record.record;
 import static de.jbee.ipo.Schema.schema;
 import static de.jbee.ipo.Series.series;
 import static de.jbee.ipo.Spec.spec;
+import static de.jbee.ipo.Struct.struct;
 import static de.jbee.lang.Array.sequence;
 import de.jbee.ipo.Attr;
 import de.jbee.ipo.Input;
 import de.jbee.ipo.Name;
+import de.jbee.ipo.Objective;
 import de.jbee.ipo.Output;
 import de.jbee.ipo.Param;
 import de.jbee.ipo.Process;
@@ -26,16 +28,21 @@ import de.jbee.lang.List;
 public class Describe
 		implements Process {
 
-	private static final Schema PARAMETER = schema( named( "parameter" ), attr( "name",
-			Prototype.NAME ), attr( "type", Prototype.NAME ) );
+	private static final Schema PARAMETER = schema( named( "parameter" ), // 
+			attr( "name", Prototype.NAME ), // 
+			attr( "type", Prototype.NAME ) );
 
-	private static final Schema ATTR = schema( named( "attribute" ),
-			attr( "name", Prototype.NAME ), attr( "type", Prototype.NAME ), attr( "min-occur",
-					Prototype.NUMBER ), attr( "max-occur", Prototype.NUMBER ) );
+	private static final Schema ATTR = schema( named( "attribute" ), //
+			attr( "name", Prototype.NAME ), // 
+			attr( "type", Prototype.NAME ), //
+			attr( "objective", Prototype.proto( named( Objective.class ), Objective.class ) ), //
+			attr( "min-occur", Prototype.NUMBER ), // 
+			attr( "max-occur", Prototype.NUMBER ) );
 
 	public static final Param NAME = param( attr( "name", Prototype.NAME ) );
 
-	private static final Spec SPEC = spec( "describe", "/describe/", NAME, PARAMETER, ATTR );
+	private static final Spec SPEC = spec( named( "describe" ), "/describe/", NAME,
+			struct( PARAMETER ), struct( ATTR ) );
 
 	@Override
 	public Output process( Input input ) {
@@ -50,19 +57,19 @@ public class Describe
 		Spec spec = process.specification();
 		List<Series> series = List.with.noElements();
 		series = series.append( describeParameters( spec ) );
-		series = series.concat( describeSeriesSchema( spec ) );
+		series = series.concat( describeStruct( spec ) );
 		return output( input, data( named( "description" ), series ) );
 	}
 
-	private List<Series> describeSeriesSchema( Spec spec ) {
+	private List<Series> describeStruct( Spec spec ) {
 		List<Series> series = List.with.noElements();
 		for ( int i = 0; i < spec.series.length(); i++ ) {
-			Schema schema = spec.series.at( i );
+			Schema schema = spec.series.at( i ).schema;
 			List<Record> records = List.with.noElements();
 			for ( int j = 0; j < schema.attributes.length(); j++ ) {
-				Attr attr = schema.attributes.at( i );
-				records = records.append( record( ATTR, attr.name, attr.proto.name, attr.minOccur,
-						attr.maxOccur ) );
+				Attr attr = schema.attributes.at( j );
+				records = records.append( record( ATTR, attr.name, attr.proto.name, attr.objective,
+						attr.card.minOccur, attr.card.maxOccur ) );
 			}
 			series = series.append( series( schema.name, ATTR, records ) );
 		}

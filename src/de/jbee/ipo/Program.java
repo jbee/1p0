@@ -30,7 +30,7 @@ public final class Program
 				return p;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException( "No such process: " + name );
 	}
 
 	@Override

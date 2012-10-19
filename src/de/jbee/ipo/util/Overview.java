@@ -8,6 +8,7 @@ import static de.jbee.ipo.Record.record;
 import static de.jbee.ipo.Schema.schema;
 import static de.jbee.ipo.Series.series;
 import static de.jbee.ipo.Spec.spec;
+import static de.jbee.ipo.Struct.struct;
 import de.jbee.ipo.Input;
 import de.jbee.ipo.Output;
 import de.jbee.ipo.Param;
@@ -30,7 +31,8 @@ public class Overview
 	private static final Schema PROCESS = schema( named( "process" ),
 			attr( "name", Prototype.NAME ), attr( "location", Prototype.LOCATION ) );
 
-	private static final Spec SPEC = spec( "overview", "/", List.with.<Param> noElements(), PROCESS );
+	private static final Spec SPEC = spec( named( "overview" ), "/",
+			List.with.<Param> noElements(), struct( PROCESS ) );
 
 	@Override
 	public Output process( Input input ) {

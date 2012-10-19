@@ -6,6 +6,8 @@ import de.jbee.lang.List;
 public final class Attr
 		implements Named, Attributed {
 
+	public static final Attr NAME = attr( "name", Prototype.NAME );
+
 	public static List<Attr> attributes( Attributed... attributes ) {
 		return attributes( Array.sequence( attributes ) );
 	}
@@ -23,30 +25,30 @@ public final class Attr
 	}
 
 	public static Attr attr( Name name, Prototype form ) {
-		return new Attr( name, form, 0, 1 );
+		return new Attr( name, form, Objective.DATA, Cardinality.ONE );
 	}
 
 	public final Name name;
 	public final Prototype proto;
-	public final int minOccur;
-	public final int maxOccur;
+	public final Objective objective;
+	public final Cardinality card;
 
-	private Attr( Name name, Prototype proto, int minOccur, int maxOccur ) {
+	private Attr( Name name, Prototype proto, Objective objective, Cardinality card ) {
 		super();
 		this.name = name;
 		this.proto = proto;
-		this.minOccur = minOccur;
-		this.maxOccur = maxOccur;
+		this.objective = objective;
+		this.card = card;
 	}
 
 	public Attr list() {
-		return new Attr( name, proto, minOccur, Integer.MAX_VALUE );
+		return new Attr( name, proto, objective, card.many() );
 	}
 
 	public Attr mandatory() {
 		return isMandatory()
 			? this
-			: new Attr( name, proto, 1, maxOccur );
+			: new Attr( name, proto, objective, card.some() );
 	}
 
 	/**
@@ -58,7 +60,7 @@ public final class Attr
 	}
 
 	public boolean isList() {
-		return maxOccur > 1;
+		return card.isMany();
 	}
 
 	@Override
@@ -72,12 +74,17 @@ public final class Attr
 	}
 
 	public boolean isMandatory() {
-		return minOccur > 0;
+		return card.isSome();
 	}
 
 	public Attr named( Name name ) {
 		return name.equalTo( this.name )
 			? this
-			: new Attr( name, proto, minOccur, maxOccur );
+			: new Attr( name, proto, objective, card );
+	}
+
+	@Override
+	public String toString() {
+		return name + ":" + proto.name;
 	}
 }
