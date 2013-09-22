@@ -11,7 +11,6 @@ import se.jbee.ipo.Series;
 import se.jbee.ipo.Value;
 import se.jbee.ipo.http.IO;
 
-
 public class HtmlPrinter
 		extends Printer {
 
@@ -57,7 +56,7 @@ public class HtmlPrinter
 	public void print( Schema schema ) {
 		out.append( "<tr><th colspan='" + schema.attributes.length() + "'>" + schema.name
 				+ "</th></tr>" );
-		out.append( "<tr>" );
+		out.append( "<tr class='attr-name'>" );
 		for ( int i = 0; i < schema.attributes.length(); i++ ) {
 			out.append( "<th>" );
 			print( schema.attributes.at( i ).name );
